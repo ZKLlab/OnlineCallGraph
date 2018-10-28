@@ -4,7 +4,6 @@ MAINTAINER ZKLlab <zkl@zkllab.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-COPY /etc/apt/sources.list /etc/apt/sources.list.bak
 COPY sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get install -y wget graphviz \
     python3.6 python-pip python-dev uwsgi-plugin-python nginx supervisor
