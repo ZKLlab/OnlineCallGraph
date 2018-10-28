@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import os
 import re
+import sys
 import time
 import shutil
 import hashlib
@@ -8,6 +10,9 @@ from PIL import Image
 from flask import Flask, abort, render_template, request
 
 app = Flask(__name__)
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 @app.route('/', methods=['GET', 'POST'])
