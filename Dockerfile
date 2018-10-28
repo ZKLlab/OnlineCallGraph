@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 COPY sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get install -y wget graphviz \
-    python3.6 python-pip python-dev uwsgi-plugin-python nginx supervisor
+    python3 python-pip python-dev uwsgi-plugin-python nginx supervisor
 COPY nginx/flask.conf /etc/nginx/sites-available/
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY app /var/www/app
