@@ -19,6 +19,6 @@ RUN mkdir -p /var/log/nginx/app /var/log/uwsgi/app /var/log/supervisor \
     && chown -R www-data:www-data /var/www/app \
     && chown -R www-data:www-data /var/log
 
-EXPOSE 80/tcp
+EXPOSE 5050/tcp
 
 CMD ["/usr/bin/supervisord"]
