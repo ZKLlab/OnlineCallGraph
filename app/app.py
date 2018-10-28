@@ -13,8 +13,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        # work_dir = os.path.join(os.getcwd(), 'app')
-        work_dir = '/var/www/app'
+        work_dir = os.getcwd()
         # Init Dir
         md5 = hashlib.md5()
         md5.update(os.urandom(32))

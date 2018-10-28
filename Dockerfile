@@ -21,4 +21,5 @@ RUN mkdir -p /var/log/nginx/app /var/log/uwsgi/app /var/log/supervisor \
 
 EXPOSE 5050/tcp
 
+WORKDIR "/var/www/app"
 CMD ["/usr/bin/supervisord"]
