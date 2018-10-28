@@ -5,7 +5,7 @@ MAINTAINER ZKLlab <zkl@zkllab.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 COPY sources.list /etc/apt/sources.list
-RUN apt-get update && apt-get install -y wget graphviz \
+RUN apt-get update && apt-get install -y wget cflow graphviz \
     python3 python-pip python-dev uwsgi-plugin-python nginx supervisor
 COPY nginx/flask.conf /etc/nginx/sites-available/
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
