@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Call Graph</title>
+</head>
+<body>
+{% if error %}
+    <h3 style="color: red">Error: {{ error }}</h3>
+{% endif %}
+{% if img_src -%}
+    <img src="{{ img_src }}" style="max-width: 95%; border: 1px solid black">
+{%- endif %}
+<form method="post">
+    <h3>A Simple Call Graph Generator</h3>
+    <p>
+        <label><strong>C/C++ Source Code:</strong><br>(Single .c/.cpp File Only)<br>
+            <textarea name="code" rows="10" style="min-width: 95%; max-width: 95%; width: 95%"></textarea>
+        </label>
+        <button>Generate</button>
+    </p>
+</form>
+</body>
+</html>
