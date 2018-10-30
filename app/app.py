@@ -55,7 +55,6 @@ def call_graph():
             cflow_child.kill()
             raise Exception('cFlow timeout.')
         print cflow_child.stdout.read()
-        print cflow_child.poll()
         with open(main_txt_path, 'r') as fp:
             lines = fp.readlines()
         # Tree to Dot
