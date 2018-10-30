@@ -38,21 +38,20 @@ def call_graph():
     if len(request.form['code']) > 1024 * 1024 * 16:
         abort(400)
     output_io = StringIO()
+    # noinspection PyBroadException
     try:
         # Source Code to Tree
         with open(main_cpp_path, 'w') as fp:
             fp.write(request.form['code'])
-        cflow_child = subprocess.Popen(['cflow', '-T', '-m', 'main', '-o', main_txt_path, main_cpp_path])
-        for i in range(80):
-            if cflow_child.poll() is None and i == 50:
-                cflow_child.terminate()
-            elif cflow_child.poll() is not None:
+        cflow_child = subprocess.Popen(['cflow', '-d', '15', '-T', '-m', 'main', '-o', main_txt_path, main_cpp_path])
+        for i in range(20):
+            print i
+            if cflow_child.poll() is not None:
                 break
             time.sleep(0.1)
         else:
             cflow_child.kill()
             raise Exception('cFlow timeout.')
-        cflow_child.wait()
         with open(main_txt_path, 'r') as fp:
             lines = fp.readlines()
         # Tree to Dot
@@ -92,10 +91,9 @@ def call_graph():
             fp.write('}')
         # Dot to Png
         dot_child = subprocess.Popen(['dot', '-Tpng', main_dot_path, '-o', main_png_path])
-        for i in range(80):
-            if dot_child.poll() is None and i == 50:
-                dot_child.terminate()
-            elif dot_child.poll() is not None:
+        for i in range(15):
+            print i
+            if dot_child.poll() is not None:
                 break
             time.sleep(0.1)
         else:
@@ -105,7 +103,7 @@ def call_graph():
         Image.open(main_png_path).convert('L').convert('RGB').save(output_io, 'PNG')
     finally:
         traceback.print_exc()
-        # Try to Remove the Dir
+        # Remove the Dir
         shutil.rmtree(base_dir, ignore_errors=True)
     output_io.seek(0)
     return send_file(output_io, mimetype='image/png')
