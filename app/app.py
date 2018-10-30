@@ -46,12 +46,13 @@ def call_graph():
         for i in range(80):
             if cflow_child.poll() is None and i == 50:
                 cflow_child.terminate()
-            else:
+            elif cflow_child.poll() is not None:
                 break
             time.sleep(0.1)
         else:
             cflow_child.kill()
             raise Exception('cFlow timeout.')
+        cflow_child.wait()
         with open(main_txt_path, 'r') as fp:
             lines = fp.readlines()
         # Tree to Dot
@@ -94,7 +95,7 @@ def call_graph():
         for i in range(80):
             if dot_child.poll() is None and i == 50:
                 dot_child.terminate()
-            else:
+            elif dot_child.poll() is not None:
                 break
             time.sleep(0.1)
         else:
