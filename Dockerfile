@@ -2,6 +2,7 @@ FROM ubuntu:16.04
 
 MAINTAINER ZKLlab <zkl@zkllab.com>
 
+ENV PYTHONBUFFERED 1
 ENV DEBIAN_FRONTEND noninteractive
 
 COPY sources.list /etc/apt/sources.list
@@ -11,7 +12,8 @@ COPY nginx/flask.conf /etc/nginx/sites-available/
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY app /var/www/app
 
-RUN mkdir -p /var/log/nginx/app /var/log/uwsgi/app /var/log/supervisor /var/www/app/src /var/www/app/static/output \
+RUN mkdir -p /var/log/nginx/app /var/log/uwsgi/app /var/log/supervisor \
+    /var/www/app/call_graph /var/www/app/static \
     && rm /etc/nginx/sites-enabled/default \
     && ln -s /etc/nginx/sites-available/flask.conf /etc/nginx/sites-enabled/flask.conf \
     && echo "daemon off;" >> /etc/nginx/nginx.conf \
@@ -19,7 +21,7 @@ RUN mkdir -p /var/log/nginx/app /var/log/uwsgi/app /var/log/supervisor /var/www/
     && chown -R www-data:www-data /var/www/app \
     && chown -R www-data:www-data /var/log
 
-EXPOSE 5050/tcp
+EXPOSE 5050
 
-WORKDIR "/var/www/app"
+WORKDIR /var/www/app
 CMD ["/usr/bin/supervisord"]

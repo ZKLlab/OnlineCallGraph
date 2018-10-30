@@ -5,13 +5,7 @@
     <title>Call Graph</title>
 </head>
 <body>
-{% if error %}
-    <h3 style="color: red">Error: {{ error }}</h3>
-{% endif %}
-{% if img_src -%}
-    <img src="{{ img_src }}" style="max-width: 95%; border: 1px solid black">
-{%- endif %}
-<form method="post">
+<form method="post" action="/call_graph">
     <h3>A Simple Call Graph Generator</h3>
     <p>
         <label><strong>C/C++ Source Code:</strong><br>(Single .c/.cpp File Only)<br>
