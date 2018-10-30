@@ -43,15 +43,19 @@ def call_graph():
         # Source Code to Tree
         with open(main_cpp_path, 'w') as fp:
             fp.write(request.form['code'])
-        cflow_child = subprocess.Popen(['cflow', '-d', '15', '-T', '-m', 'main', '-o', main_txt_path, main_cpp_path])
+        cflow_child = subprocess.Popen(
+            ['cflow', '-d', '15', '-v', '-T', '-o', main_txt_path, main_cpp_path],
+            stdout=subprocess.PIPE
+        )
         for i in range(20):
-            print i
             if cflow_child.poll() is not None:
                 break
             time.sleep(0.1)
         else:
             cflow_child.kill()
             raise Exception('cFlow timeout.')
+        print cflow_child.stdout.read()
+        print cflow_child.poll()
         with open(main_txt_path, 'r') as fp:
             lines = fp.readlines()
         # Tree to Dot
@@ -71,6 +75,8 @@ def call_graph():
             if depth == current_depth + 1:
                 layers.append(match_result[0])
             elif depth == current_depth:
+                if current_depth == 1 and depth == 1:
+                    dot_pairs.append([layers[0], None])
                 layers[depth - 1] = match_result[0]
             elif depth < current_depth:
                 layers[depth - 1] = match_result[0]
@@ -80,19 +86,23 @@ def call_graph():
             current_depth = depth
             if len(layers) >= 2:
                 dot_pairs.append([layers[-2], layers[-1]])
+        if current_depth == 1:
+            dot_pairs.append([layers[0], None])
         dot_pairs_set = []
         for item in dot_pairs:
             if item not in dot_pairs_set:
                 dot_pairs_set.append(item)
         with open(main_dot_path, 'w') as fp:
-            fp.write('digraph G{\n\trankdir=LR;\n\tsize="2480,3508";\n\tnode [fontsize=24,shape=box];\n')
+            fp.write('digraph G{\n\trankdir=LR;\n\tnode [fontsize=24,shape=box];\n')
             for i1, i2 in dot_pairs_set:
-                fp.write('\t"%s" -> "%s";\n' % (i1, i2))
+                if i2 is None:
+                    fp.write('\t"%s";\n' % i1)
+                else:
+                    fp.write('\t"%s" -> "%s";\n' % (i1, i2))
             fp.write('}')
         # Dot to Png
         dot_child = subprocess.Popen(['dot', '-Tpng', main_dot_path, '-o', main_png_path])
         for i in range(15):
-            print i
             if dot_child.poll() is not None:
                 break
             time.sleep(0.1)
