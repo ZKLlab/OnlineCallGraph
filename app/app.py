@@ -45,7 +45,7 @@ def call_graph():
             fp.write(request.form['code'])
         cflow_child = subprocess.Popen(
             ['cflow', '-d', '15', '-v', '-T', '-o', main_txt_path, main_cpp_path],
-            stdout=subprocess.PIPE
+            stderr=subprocess.PIPE
         )
         for i in range(20):
             if cflow_child.poll() is not None:
@@ -54,7 +54,7 @@ def call_graph():
         else:
             cflow_child.kill()
             raise Exception('cFlow timeout.')
-        print cflow_child.stdout.read()
+        print cflow_child.stderr.read()
         with open(main_txt_path, 'r') as fp:
             lines = fp.readlines()
         # Tree to Dot
